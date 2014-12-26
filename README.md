@@ -1,3 +1,8 @@
+Master Status: 
+[![Build Status](https://travis-ci.org/POData/POData-HAL.svg?branch=master)](https://travis-ci.org/POData/POData-HAL)
+[![Coverage Status](https://img.shields.io/coveralls/POData/POData-HAL.svg)](https://coveralls.io/r/POData/POData-HAL)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/POData/POData-HAL/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/POData/POData-HAL/?branch=master)
+
 POData-HAL
 ==========
 
