@@ -1,6 +1,6 @@
 <?php
 
-namespace POData\Writers\Json;
+namespace POData\Writers\HAL;
 
 use POData\ObjectModel\ODataFeed;
 use POData\ObjectModel\ODataEntry;
@@ -22,11 +22,14 @@ use POData\Common\InvalidOperationException;
 use POData\Providers\ProvidersWrapper;
 
 /**
- * Class JsonODataV1Writer is a writer for the json format in OData V1
- * @package POData\Writers\Json
+ * A writer for the HAL+JSON format
+ * @package POData\Writers\HAL
  */
-class JsonODataV1Writer implements IODataWriter
+class HALJSONODataWriter implements IODataWriter
 {
+
+    const MIME_APPLICATION_HAL_JSON = 'application/hal+json';
+
     /**
      * Json output writer.
      *
@@ -53,13 +56,10 @@ class JsonODataV1Writer implements IODataWriter
 	 */
 	public function canHandle(Version $responseVersion, $contentType)
 	{
-		if($responseVersion != Version::v1()){
-			return false;
-		}
 
 		$parts = explode(";", $contentType);
 
-		return in_array(MimeTypes::MIME_APPLICATION_JSON, $parts);
+		return in_array(self::MIME_APPLICATION_HAL_JSON, $parts);
 	}
 
 	/**
@@ -70,32 +70,7 @@ class JsonODataV1Writer implements IODataWriter
 	 * @return JsonODataV1Writer
 	 */
 	public function write($model){
-		// { "d" :
-		$this->_writer
-			->startObjectScope()
-			->writeName("d");
 
-
-		if ($model instanceof ODataURL) {
-			$this->_writer->startObjectScope();
-			$this->writeURL($model);
-		} elseif ($model instanceof ODataURLCollection) {
-			$this->_writer->startArrayScope();
-			$this->writeURLCollection($model);
-		} elseif ($model instanceof ODataPropertyContent) {
-			$this->_writer->startObjectScope();
-			$this->writeProperties($model);
-		} elseif ($model instanceof ODataFeed) {
-			$this->_writer->startArrayScope();
-			$this->writeFeed($model);
-		}elseif ($model instanceof ODataEntry) {
-			$this->_writer->startObjectScope();
-			$this->writeEntry($model);
-		}
-
-
-		$this->_writer->endScope();
-		$this->_writer->endScope();
 
 		return $this;
 	}
@@ -108,9 +83,7 @@ class JsonODataV1Writer implements IODataWriter
      */
     public function writeUrl(ODataURL $url)
     {
-        $this->_writer
-            ->writeName($this->urlKey)
-	        ->writeValue($url->url);
+
 
 	    return $this;
     }
